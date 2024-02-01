@@ -25,7 +25,6 @@ set_target_properties(test-cam PROPERTIES
 target_include_directories(test-cam
     PUBLIC "${CMAKE_SOURCE_DIR}"
     PUBLIC "${OpenCV_INCLUDE_DIRS}"
-    PUBLIC "${fmt_INCLUDE_DIRS}"
 )
 target_link_libraries(test-cam
     PUBLIC ${OpenCV_LIBS}
