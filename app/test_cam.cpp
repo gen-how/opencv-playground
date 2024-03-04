@@ -19,13 +19,13 @@ Args handle_args(int argc, char** argv) {
   Args args;
   try {
     CmdLine cmd("test-cam", ' ', "0.1");
-    ValueArg<int> _cam_idx("c", "camera", "camera index", false, 0, "int", cmd);
-    ValueArg<int> _width("", "width", "frame width", false, 1920, "int", cmd);
-    ValueArg<int> _height("", "height", "frame height", false, 1080, "int", cmd);
-    ValueArg<int> _fps("", "fps", "frame per second", false, 30, "int", cmd);
-    SwitchArg _v4l2("", "v4l2", "use v4l2 backend", cmd, false);
-    SwitchArg _fullscreen("f", "fullscreen", "fullscreen mode", cmd, false);
-    ValueArg<std::string> _fmt("", "format", "pixel format", false, "", "string", cmd);
+    ValueArg<int> _cam_idx("c", "camera", "Specify camera index", false, 0, "INT", cmd);
+    ValueArg<int> _width("", "width", "Set frame width", false, 1920, "INT", cmd);
+    ValueArg<int> _height("", "height", "Set frame height", false, 1080, "INT", cmd);
+    ValueArg<int> _fps("", "fps", "Set frames per second", false, 30, "INT", cmd);
+    SwitchArg _v4l2("", "v4l2", "Use v4l2 backend", cmd, false);
+    SwitchArg _fullscreen("f", "fullscreen", "Set fullscreen mode", cmd, false);
+    ValueArg<std::string> _fmt("", "format", "Set pixel format", false, "", "STRING", cmd);
     cmd.parse(argc, argv);
     args.cam_idx = _cam_idx.getValue();
     args.width = _width.getValue();
