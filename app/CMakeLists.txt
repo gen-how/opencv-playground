@@ -1,8 +1,3 @@
-add_library(tclap INTERFACE)
-target_include_directories(tclap
-    INTERFACE "${CMAKE_SOURCE_DIR}/tclap/include"
-)
-
 add_executable(test-cam
     test_cam.cpp
 )
@@ -17,7 +12,6 @@ target_include_directories(test-cam
 )
 target_link_libraries(test-cam
     PUBLIC ${OpenCV_LIBS}
-    PUBLIC tclap
 )
 
 
@@ -35,5 +29,4 @@ target_include_directories(test-meanshift
 )
 target_link_libraries(test-meanshift
     PUBLIC ${OpenCV_LIBS}
-    PUBLIC tclap
 )

@@ -1,66 +1,17 @@
 #include <string>
 
 #include <opencv2/opencv.hpp>
-#include <tclap/CmdLine.h>
 #include <utils/println.h>
 
-struct Args {
-  int cam_idx;
-  int width;
-  int height;
-  int fps;
-  bool v4l2;
-  bool fullscreen;
-  std::string fmt;
-};
-
-Args handle_args(int argc, char** argv) {
-  using namespace TCLAP;
-  Args args;
-  try {
-    CmdLine cmd("test-cam", ' ', "0.1");
-    ValueArg<int> _cam_idx("c", "camera", "Specify camera index", false, 0, "INT", cmd);
-    ValueArg<int> _width("", "width", "Set frame width", false, 1920, "INT", cmd);
-    ValueArg<int> _height("", "height", "Set frame height", false, 1080, "INT", cmd);
-    ValueArg<int> _fps("", "fps", "Set frames per second", false, 30, "INT", cmd);
-    SwitchArg _v4l2("", "v4l2", "Use v4l2 backend", cmd, false);
-    SwitchArg _fullscreen("f", "fullscreen", "Set fullscreen mode", cmd, false);
-    ValueArg<std::string> _fmt("", "format", "Set pixel format", false, "", "STRING", cmd);
-    cmd.parse(argc, argv);
-    args.cam_idx = _cam_idx.getValue();
-    args.width = _width.getValue();
-    args.height = _height.getValue();
-    args.fps = _fps.getValue();
-    args.v4l2 = _v4l2.getValue();
-    args.fullscreen = _fullscreen.getValue();
-    args.fmt = _fmt.getValue();
-  } catch (ArgException& e) {
-    ERROR("%s for arg %s", e.error().c_str(), e.argId().c_str());
-    exit(1);
-  }
-  return args;
-}
-
-int process(Args args) {
-  cv::VideoCapture cap(args.cam_idx, args.v4l2 ? cv::CAP_V4L2 : cv::CAP_ANY);
+int process() {
+  cv::VideoCapture cap(0);
   if (!cap.isOpened()) {
-    ERROR("Unable to open camera(%d)", args.cam_idx);
+    ERROR("Unable to open default camera");
     return -1;
   }
-  if (!args.fmt.empty()) {
-    INFO("Set pixel format: %s", args.fmt.c_str());
-    cap.set(cv::CAP_PROP_FOURCC,
-            cv::VideoWriter::fourcc(args.fmt[0], args.fmt[1], args.fmt[2], args.fmt[3]));
-  }
-  cap.set(cv::CAP_PROP_FRAME_WIDTH, args.width);
-  cap.set(cv::CAP_PROP_FRAME_HEIGHT, args.height);
-  cap.set(cv::CAP_PROP_FPS, args.fps);
 
   std::string win_name = "test-cam";
   cv::namedWindow(win_name);
-  if (args.fullscreen) {
-    cv::setWindowProperty(win_name, cv::WND_PROP_FULLSCREEN, cv::WINDOW_FULLSCREEN);
-  }
 
   cv::Mat frame;
   while (true) {
@@ -85,7 +36,6 @@ int process(Args args) {
 }
 
 int main(int argc, char** argv) {
-  Args args = handle_args(argc, argv);
-
-  return process(args);
+  int exit_code = process();
+  return exit_code;
 }
